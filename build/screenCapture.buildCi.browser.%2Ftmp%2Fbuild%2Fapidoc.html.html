@@ -1,0 +1,139 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>wgetjs (v0.3.6)</a>
+</h1>
+<h4>Ultra simple async retrieval of remote files over http or https</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.wgetjs">module wgetjs</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.wgetjs.wgetjs">
+            function <span class="apidocSignatureSpan"></span>wgetjs
+            <span class="apidocSignatureSpan">(options, callback)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.wgetjs" id="apidoc.module.wgetjs">module wgetjs</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.wgetjs.wgetjs" id="apidoc.element.wgetjs.wgetjs">
+        function <span class="apidocSignatureSpan"></span>wgetjs
+        <span class="apidocSignatureSpan">(options, callback)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function wget(options, callback) {
+	if (typeof options === 'string') {
+		options  = { url: options };
+	}
+	options      = options  || {};
+	callback     = callback || function (){};
+	var src      = options.url || options.uri || options.src,
+	    parts    = src.split('/'),
+	    file     = parts[parts.length-1]
+	;
+	parts        = file.split('?');
+	file         = parts[0];
+	parts        = file.split('#');
+	file         = parts[0];
+	options.dest = options.dest || './';
+	if (options.dest.substr(options.dest.length-1,1) == '/') {
+		options.dest = options.dest + file;
+	}
+
+
+	function handle_request_callback(err, res, body) {
+		if (err) {
+			callback(err);
+		} else {
+			var data = {
+				filepath: options.dest
+			};
+			if (res &amp;&amp; res.headers) {
+				data.headers = res.headers;
+			}
+			callback(err, data, body);
+		}
+	}
+
+
+	if (options.dry) {
+		handle_request_callback(null, {}, { filepath: options.dest });
+		return options.dest;
+	} else {
+		try {
+			request(options, handle_request_callback).pipe(fs.createWriteStream(options.dest));
+		} catch (err) {
+			callback(err);
+		}
+	}
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
